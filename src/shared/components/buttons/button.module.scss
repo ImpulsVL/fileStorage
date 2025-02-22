@@ -1,0 +1,66 @@
+  
+.button {
+    text-align: center;
+    width: 100%;
+    color: $whiteMain;
+    border-radius: $border-radius8;
+    padding: 14.5px;
+    font: $fontP3;
+    border: none;
+    cursor: pointer;
+  
+    &.primary {
+      background-color: $prplMain;
+    }
+  
+    &.secondary {
+      background-color: $prpl100;
+      color: $prplMain;
+    }
+  
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+.button__google{
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    width: 100%;
+    color: $whiteMain;
+    background-color: $prplMain;
+    border-radius: $border-radius8;
+    padding: 14.5px;
+    font: $fontP3;
+    border: none;
+    cursor: pointer;
+  
+    &:hover {
+      opacity: 0.8;
+    }
+}
+
+.button__add{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  
+  width: 100%;
+  color: $whiteMain;
+  background-color: $prplMain;
+  border-radius: $border-radius4;
+  padding: 9px;
+  font: $fontP7;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Second-homework
 
-## Getting Started
+LocalStorage project
 
-First, run the development server:
+## Описание проекта
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Проект представляет собой веб-приложение для управления файловым хранилищем, где пользователь может загружать файлы и создавать папки. Все операции с файлами и папками доступны только после успешной авторизации. Приложение должно работать без серверной части, используя для хранения данных LocalStorage.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Node
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Для работы с проектом требуется установка Node.js. 
+Версия для корректной работы проекта Node.js v20.18.0
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Установка
 
-## Learn More
+Инструкции по установке проекта на локальной машине.
 
-To learn more about Next.js, take a look at the following resources:
+1. Клонируйте репозиторий:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   git clone https://github.com/ImpulsVL/storybook-uikit
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Перейдите в директорию проекта:
 
-## Deploy on Vercel
+   cd autorization-work
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Установите зависимости:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   npm install
+
+4. Запустите проект:
+
+   npm run dev
+   
+7. Скопируйте ссылку и вставьте в бразуере:
+
+   http://localhost:3000
+
+8. Выполнить сборку проекта:
+
+   npm run build
+
+
+## Стек используемых технологий
+
+* HTML5
+* SCSS
+* Node.js
+* TypeScript
+* Storybook
+* Next.js

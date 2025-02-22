@@ -1,0 +1,27 @@
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $whiteMain;
+    padding: 11px 24px;
+    border-radius: $border-radius8;
+}
+
+.logo{
+    width: 128px;
+    height: 26px;
+    cursor: pointer;
+}
+
+.language{
+    width: 24px;
+    height: 24px;
+    background-image: url('../../assets/language.svg');
+    cursor: pointer;
+
+    &:hover{
+        opacity: 0.7;
+    }
+}

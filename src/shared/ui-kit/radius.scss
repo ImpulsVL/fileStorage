@@ -1,0 +1,34 @@
+$border-radius8: 8px;
+$border-radius6: 6px;
+$border-radius4: 4px;
+$border-radius10: 10px;
+
+@media (max-width: 1920px) {
+  .a {
+    border-radius: $border-radius8;
+  }
+}
+
+@media (max-width: 1440px) {
+  .a {
+    border-radius: $border-radius8;
+  }
+}
+
+@media (max-width: 1024px) {
+  .a {
+    border-radius: $border-radius6;
+  }
+}
+
+@media (max-width: 768px) {
+  .a {
+    border-radius: $border-radius4;
+  }
+}
+
+@media (max-width: 320px) {
+  .a {
+    border-radius: $border-radius4;
+  }
+}
