@@ -52,8 +52,8 @@ const Modal: React.FC<ModalProps> = ({ onClose }) => {
                     </div>
                 </div>
                 <div className={styles.modal__buttons}>
-                    <Button type='button' label='Создать' variant='primary' onClick={handleOverlayClick} />
-                    <Button type='button' label='Отмена' variant='secondary' onClick={handleOverlayClick} />
+                    <Button type='submit' label='Создать' variant='primary' onClick={handleOverlayClick} />
+                    <Button type='submit' label='Отмена' variant='secondary' onClick={handleOverlayClick} />
                 </div>
             </div>
         </div>

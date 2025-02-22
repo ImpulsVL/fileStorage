@@ -14,7 +14,11 @@ interface InputProps {
 const InputLabel: React.FC<InputProps> = ({ value, placeholder, id, type, onChange, label, maxLength }) => {
     return (
         <div className={styles.inputlabel__container}>
-            <label className={styles.label}>{label}</label>
+            {label && (
+                <label htmlFor={id} className={styles.label}>
+                    {label}
+                </label>
+            )}
             <input
                 type={type}
                 id={id}

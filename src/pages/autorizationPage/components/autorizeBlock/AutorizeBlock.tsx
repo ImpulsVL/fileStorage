@@ -2,6 +2,10 @@
 
 import React, { useState } from 'react';
 
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import styles from './AutorizeBlock.module.scss';
 import Button from '@/shared/components/buttons/button';
 import ButtonGoogle from '@/shared/components/buttons/buttonGoogle';
@@ -9,7 +13,20 @@ import Input from '@/shared/components/inputs/input';
 
 import { useRouter } from 'next/navigation';
 
+const schema = z.object({
+    email: z.string().email('Некорректный адрес электронной почты').nonempty('Электронная почта обязательна'),
+    password: z.string().min(6, 'Пароль должен содержать минимум 6 символов').nonempty('Пароль обязателен'),
+});
+
 const AutorizeBlock: React.FC = () => {
+
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: zodResolver(schema),
+    });
+
+    const onSubmit = (data: { email: string; password: string }) => {
+
+    };
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -26,7 +43,7 @@ const AutorizeBlock: React.FC = () => {
         <div className={styles.autorize}>
             <h1 className={styles.title}>Авторизация</h1>
 
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.input__group}>
                     <Input type="email" value={email}  placeholder='Электронная почта' id='email' onChange={handleEmailChange}/>
 
@@ -34,8 +51,8 @@ const AutorizeBlock: React.FC = () => {
                 </div>
 
                 <div className={styles.button__group}>
-                    <Button type='button' label="Войти" variant="primary"/>
-                    <Button type='button' label="Зарегистрироваться" variant="secondary" link='/register'/>
+                    <Button type='submit' label="Войти" variant="primary"/>
+                    <Button type='submit' label="Зарегистрироваться" variant="secondary" link='/register'/>
                 </div>
             </form>
 
