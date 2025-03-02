@@ -1,0 +1,40 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $black400;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal__content {
+    background: $whiteMain;
+    padding: 32px;
+    border-radius: $border-radius8;
+    width: 600px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal__title{
+    color: $blackMain;
+    font: $fontH3;
+}
+
+.modal__description{
+    color: $black500;
+    font: $fontP3;
+    margin-bottom: 16px;
+}
+
+.modal__buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}

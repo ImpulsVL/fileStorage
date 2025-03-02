@@ -5,8 +5,8 @@ import Link from 'next/link';
 
 interface ButtonProps {
   label: string;
-  type: 'submit';
-  variant?: 'primary' | 'secondary' ;
+  type: 'submit' | 'button';
+  variant?: 'primary' | 'secondary' | 'delete' ;
   onClick?: () => void;
   link?: string;
 }

@@ -17,6 +17,11 @@
       background-color: $prpl100;
       color: $prplMain;
     }
+
+    &.delete {
+      background-color: $red100;
+      color: $redMain;
+    }
   
     &:hover {
       opacity: 0.8;

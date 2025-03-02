@@ -41,10 +41,175 @@
     font: $fontP3;
 }
 
-.mainblock{
+.main__block{
     border-radius: $border-radius8;
     background-color: $whiteMain;
     padding: 16px;
     width: 100%;
     height: 840px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.main__files{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.main__folders{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+    gap: 20px;
+
+    &::after{
+        content: '';
+        display: block;
+        width: 100%;
+        height: 1px;
+        background-color: $black300;
+        position: absolute;
+        bottom: -16px;
+        left: 0;
+    }
+}
+
+.folder__item{
+    width: 318px;
+    height: 170px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: $border-radius8;
+    background-color: $black100;
+    cursor: pointer;
+
+    &.active{
+        background-color: $black200;
+    }
+}
+
+.folder__name{
+    color: $blackMain;
+    font: $fontP3;
+}
+
+.folder__size, .folder__date{
+    font: $fontP8;
+    color: $black500;
+}
+
+.files_buttonAdd{
+    width: 139px;
+}
+
+.folder__section{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.folder__buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.pen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background-color: $prpl100;
+    border-radius: 4px;
+
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+.deleteFolder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    background-color: $red100;
+    border-radius: 4px;
+
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+.folder__info{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file__name{
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font: $fontP9;
+    color: $blackMain;
+}
+
+.file__size{
+    font: $fontP9;
+    color: $black500;
+}
+
+.deleteFile{
+    cursor: pointer;
+
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+.files__items{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    gap: 8px;
+}
+
+.file__item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 240px;
+    gap: 8px;
+
+    border-radius: $border-radius4;
+    padding: 6px 12px;
+    background-color: $black100;
+}
+
+.file__title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.file__description{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
 }

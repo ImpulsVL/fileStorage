@@ -11,8 +11,6 @@ import Button from '@/shared/components/buttons/button';
 import ButtonGoogle from '@/shared/components/buttons/buttonGoogle';
 import Input from '@/shared/components/inputs/input';
 
-import { useRouter } from 'next/navigation';
-
 const schema = z.object({
     email: z.string().email('Некорректный адрес электронной почты').nonempty('Электронная почта обязательна'),
     password: z.string().min(6, 'Пароль должен содержать минимум 6 символов').nonempty('Пароль обязателен'),

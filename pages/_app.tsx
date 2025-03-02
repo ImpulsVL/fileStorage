@@ -7,6 +7,7 @@ const App = ({ Component, pageProps }: AppProps): ReactElement => {
     return (
         <div className="Content">
             <Component {...pageProps} />
+            <div id="modal-root"></div>
         </div>
     )
 }

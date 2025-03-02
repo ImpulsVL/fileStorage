@@ -1,24 +1,182 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styles from './MainPage.module.scss';
 import Header from '@/shared/components/header/Header';
 import ButtonAdd from '@/shared/components/buttons/buttonAdd';
-import Modal from './components/CreateDirectory';
+
+import Modal from '../../shared/modal/CreateDirectory';
+import CreateFile from '../../shared/modal/CreateFile';
+
+import Folders from './components/Folders';
+import Files from './components/Files';
+import ModalChange from '@/shared/modal/ChangeDirectory';
+import DeleteDirectory from '@/shared/modal/DeleteDirectory';
+import DeleteFile from '@/shared/modal/DeleteFile';
+
+interface Folder {
+  name: string;
+  description: string;
+  files?: FileData[];
+}
+
+interface FileData {
+  file: File;
+  name: string;
+  size: number;
+}
 
 const MainPage: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenFile, setIsModalOpenFile] = useState(false);
+
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [currentFolderIndex, setCurrentFolderIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const storedFolders = localStorage.getItem('folders');
+    if (storedFolders) {
+      setFolders(JSON.parse(storedFolders));
+    }
+  }, []);
+
 
   const handleAddFolderClick = () => {
     setIsModalOpen(true);
-    document.body.style.overflow = 'hidden'; // Блокируем прокрутку
+    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    document.body.style.overflow = 'auto'; // Восстанавливаем прокрутку
+    document.body.style.overflow = 'auto';
+  };
+
+  const addFolder = (name: string, description: string) => {
+    const newFolder = { name, description };
+    const updatedFolders = [...folders, newFolder];
+    setFolders(updatedFolders);
+    localStorage.setItem('folders', JSON.stringify(updatedFolders));
+    closeModal();
+  };
+
+  const handleFolderClick = (index: number) => {
+    if (currentFolderIndex == index) {
+      setCurrentFolderIndex(null);
+    } else {
+      setCurrentFolderIndex(index);
+    }
+  };
+
+  const handleAddFileClick = () => {
+    setIsModalOpenFile(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeFileModal = () => {
+    setIsModalOpenFile(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const addFile = (folderIndex: number, fileData: FileData) => {
+    const updatedFolders = [...folders];
+    const folder = updatedFolders[folderIndex];
+
+    if (!folder.files) {
+      folder.files = [];
+    }
+
+    folder.files.push(fileData);
+
+    setFolders(updatedFolders);
+    localStorage.setItem('folders', JSON.stringify(updatedFolders));
+  };
+
+  const [isDeleteFileModalOpen, setIsDeleteFileModalOpen] = useState(false);
+  const [deleteFileFolderIndex, setDeleteFileFolderIndex] = useState<number | null>(null);
+  const [deleteFileIndex, setDeleteFileIndex] = useState<number | null>(null);
+
+  const handleDeleteFile = (folderIndex: number, fileIndex: number) => {
+    setDeleteFileFolderIndex(folderIndex);
+    setDeleteFileIndex(fileIndex);
+    setIsDeleteFileModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeDeleteFileModal = () => {
+    setIsDeleteFileModalOpen(false);
+    setDeleteFileFolderIndex(null);
+    setDeleteFileIndex(null);
+    document.body.style.overflow = 'auto';
+  };
+
+  const confirmDeleteFile = () => {
+    if (deleteFileFolderIndex !== null && deleteFileIndex !== null) {
+      const updatedFolders = [...folders];
+      const folder = updatedFolders[deleteFileFolderIndex];
+
+      if (folder.files) {
+        folder.files.splice(deleteFileIndex, 1);
+      }
+
+      setFolders(updatedFolders);
+      localStorage.setItem('folders', JSON.stringify(updatedFolders));
+      closeDeleteFileModal();
+    }
+  };
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFolderIndex, setEditFolderIndex] = useState<number | null>(null);
+  const [editFolderName, setEditFolderName] = useState('');
+  const [editFolderDescription, setEditFolderDescription] = useState('');
+
+  const handleEditFolder = (index: number) => {
+    const folder = folders[index];
+    setEditFolderName(folder.name);
+    setEditFolderDescription(folder.description);
+    setEditFolderIndex(index);
+    setIsEditModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    document.body.style.overflow = 'auto';
+  };
+
+  const updateFolder = (name: string, description: string) => {
+    if (editFolderIndex !== null) {
+      const updatedFolders = [...folders];
+      updatedFolders[editFolderIndex] = { ...updatedFolders[editFolderIndex], name, description };
+      setFolders(updatedFolders);
+      localStorage.setItem('folders', JSON.stringify(updatedFolders));
+      closeEditModal();
+    }
+  };
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteFolderIndex, setDeleteFolderIndex] = useState<number | null>(null);
+
+  const handleDeleteFolder = (index: number) => {
+    setDeleteFolderIndex(index);
+    setIsDeleteModalOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteFolderIndex(null);
+    document.body.style.overflow = 'auto';
+  };
+
+  const confirmDeleteFolder = () => {
+    if (deleteFolderIndex !== null) {
+      const updatedFolders = folders.filter((_, index) => index !== deleteFolderIndex);
+      setFolders(updatedFolders);
+      localStorage.setItem('folders', JSON.stringify(updatedFolders));
+      closeDeleteModal();
+    }
   };
 
   return (
@@ -31,13 +189,37 @@ const MainPage: React.FC = () => {
             <p className={styles.info__mail}>konstantin@mail.com</p>
             <p className={styles.info__mobile}>89631874567</p>
           </section>
-          <ButtonAdd type='button' label="Создать папку" onClick={handleAddFolderClick}/>
+          <ButtonAdd type='button' label="Создать папку" onClick={handleAddFolderClick} />
         </div>
-        <div className={styles.mainblock}>
+        <div className={styles.main__block}>
+
+          <Folders
+            folders={folders}
+            currentFolderIndex={currentFolderIndex}
+            onFolderClick={handleFolderClick}
+            onEditFolder={handleEditFolder}
+            onDeleteFolder={handleDeleteFolder}
+          />
+
+          <section className={styles.main__files}>
+            <div className={styles.files_buttonAdd}>
+              <ButtonAdd type='button' label="Добавить файл" onClick={handleAddFileClick} />
+            </div>
+
+            <Files
+              files={currentFolderIndex !== null ? folders[currentFolderIndex]?.files || [] : []}
+              onDeleteFile={handleDeleteFile}
+              currentFolderIndex={currentFolderIndex}
+            />
+          </section>
 
         </div>
       </main>
-      {isModalOpen && <Modal onClose={closeModal} />}
+      {isModalOpen && <Modal onClose={closeModal} onAddFolder={addFolder} />}
+      {isModalOpenFile && <CreateFile onClose={closeFileModal} onAddFile={addFile} folderIndex={currentFolderIndex!} />}
+      {isEditModalOpen && (<ModalChange onClose={closeEditModal} onAddFolder={updateFolder} initialName={editFolderName} initialDescription={editFolderDescription} />)}
+      {isDeleteModalOpen && (<DeleteDirectory onClose={closeDeleteModal} onConfirm={confirmDeleteFolder} />)}
+      {isDeleteFileModalOpen && (<DeleteFile onClose={closeDeleteFileModal} onConfirm={confirmDeleteFile} />)}
     </div>
   );
 };
