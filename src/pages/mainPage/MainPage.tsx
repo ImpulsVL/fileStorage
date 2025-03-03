@@ -2,6 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 
+import { useUser } from '../../features/context/User';
+import { User } from '../../features/context/User';
+
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from '../../processes/auth/Firebase';
+
 import styles from './MainPage.module.scss';
 import Header from '@/shared/components/header/Header';
 import ButtonAdd from '@/shared/components/buttons/buttonAdd';
@@ -28,12 +34,31 @@ interface FileData {
 }
 
 const MainPage: React.FC = () => {
+  const { user: firebaseUser, setUser } = useUser();
+  const [userData, setUserData] = useState<User | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenFile, setIsModalOpenFile] = useState(false);
 
   const [folders, setFolders] = useState<Folder[]>([]);
   const [currentFolderIndex, setCurrentFolderIndex] = useState<number | null>(null);
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     if (firebaseUser) {
+  //       const userDocRef = doc(db, 'users', firebaseUser.uid);
+  //       const userDoc = await getDoc(userDocRef);
+
+  //       if (userDoc.exists()) {
+  //         const data = userDoc.data();
+  //         setUser({ ...data, uid: firebaseUser.uid } as User);
+  //         setUserData({ ...data, uid: firebaseUser.uid } as User);
+  //       }
+  //     }
+  //   };
+
+  //   fetchUserData();
+  // }, [firebaseUser, setUser]);
 
   useEffect(() => {
     const storedFolders = localStorage.getItem('folders');
@@ -44,8 +69,10 @@ const MainPage: React.FC = () => {
 
 
   const handleAddFolderClick = () => {
-    setIsModalOpen(true);
-    document.body.style.overflow = 'hidden';
+    if (folders.length < 10) {
+      setIsModalOpen(true);
+      document.body.style.overflow = 'hidden';
+    }
   };
 
   const closeModal = () => {
@@ -70,8 +97,10 @@ const MainPage: React.FC = () => {
   };
 
   const handleAddFileClick = () => {
-    setIsModalOpenFile(true);
-    document.body.style.overflow = 'hidden';
+    if (currentFolderIndex !== null && (folders[currentFolderIndex]?.files?.length || 0) < 30) {
+      setIsModalOpenFile(true);
+      document.body.style.overflow = 'hidden';
+    }
   };
 
   const closeFileModal = () => {
@@ -185,11 +214,19 @@ const MainPage: React.FC = () => {
       <main className={styles.main}>
         <div className={styles.sidebar}>
           <section className={styles.info}>
-            <h2 className={styles.info__name}>Константин Констатинопольский</h2>
-            <p className={styles.info__mail}>konstantin@mail.com</p>
-            <p className={styles.info__mobile}>89631874567</p>
+            {userData ? (
+              <>
+                <h2 className={styles.info__name}>{userData.fio}</h2>
+                <p className={styles.info__mail}>{userData.email}</p>
+                <p className={styles.info__mobile}>{userData.mobile}</p>
+              </>
+            ) : (
+              <p>Пользователь не зарегистрирован</p>
+            )}
           </section>
-          <ButtonAdd type='button' label="Создать папку" onClick={handleAddFolderClick} />
+          {folders.length < 10 && (
+            <ButtonAdd type='button' label="Создать папку" onClick={handleAddFolderClick} />
+          )}
         </div>
         <div className={styles.main__block}>
 
@@ -203,7 +240,9 @@ const MainPage: React.FC = () => {
 
           <section className={styles.main__files}>
             <div className={styles.files_buttonAdd}>
-              <ButtonAdd type='button' label="Добавить файл" onClick={handleAddFileClick} />
+              {currentFolderIndex !== null && (folders[currentFolderIndex]?.files?.length || 0) < 30 && (
+                <ButtonAdd type='button' label="Добавить файл" onClick={handleAddFileClick} />
+              )}
             </div>
 
             <Files

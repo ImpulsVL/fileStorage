@@ -1,65 +1,64 @@
 'use client'
 
 import React, { useState } from 'react';
+import { useUser } from '../../../../features/context/User';
 
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db, doc, setDoc } from '../../../../processes/auth/Firebase';
 import styles from './RegisterBlock.module.scss';
 import Button from '@/shared/components/buttons/button';
 import Input from '@/shared/components/inputs/input';
 
 const RegisterBlock: React.FC = () => {
 
-    const [fio, setFio] = useState('');
-    const [mobile, setMobile] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [secondpassword, setSecondpassword] = useState('');
+    const [fio, setFio] = useState<string>('');
+    const [mobile, setMobile] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [secondPassword, setSecondPassword] = useState<string>('');
 
-    const handleFioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFio(e.target.value);
-    };
+    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (password !== secondPassword) {
+            alert("Пароли не совпадают");
+            return;
+        }
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
-    const handleMobileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setMobile(e.target.value);
-    };
+            await setDoc(doc(db, 'users', user.uid), {
+                fio,
+                mobile,
+                email
+            });
 
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
-    };
-
-
-    const handleSecondPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSecondpassword(e.target.value);
+            alert('Регистрация успешна!');
+        } catch (error) {
+            alert('Ошибка регистрации');
+        }
     };
 
     return (
         <div className={styles.registrize}>
             <h1 className={styles.title}>Регистрация</h1>
 
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleRegister}>
                 <div className={styles.input__group}>
-                    <Input type="fio" value={fio} placeholder='ФИО' id='fio' onChange={handleFioChange} />
-
-                    <Input type="mobile" value={mobile} placeholder='Номер телефона' id='mobile' onChange={handleMobileChange} />
-
-                    <Input type="email" value={email} placeholder='Электронная почта' id='email' onChange={handleEmailChange} />
-
-                    <Input type="password" value={password} placeholder='Пароль' id='password' onChange={handlePasswordChange} />
-
-                    <Input type="password" value={secondpassword} placeholder='Повторить пароль' id='password' onChange={handleSecondPasswordChange} />
+                    <Input type="text" value={fio} placeholder='ФИО' id='fio' onChange={(e) => setFio(e.target.value)} />
+                    <Input type="text" value={mobile} placeholder='Номер телефона' id='mobile' onChange={(e) => setMobile(e.target.value)} />
+                    <Input type="email" value={email} placeholder='Электронная почта' id='email' onChange={(e) => setEmail(e.target.value)} />
+                    <Input type="password" value={password} placeholder='Пароль' id='password' onChange={(e) => setPassword(e.target.value)} />
+                    <Input type="password" value={secondPassword} placeholder='Повторить пароль' id='secondpassword' onChange={(e) => setSecondPassword(e.target.value)} />
                 </div>
 
                 <div className={styles.button__group}>
                     <Button type='submit' label="Зарегистрироваться" variant="primary" />
-                    <Button type='submit' label="Войти" variant="secondary" link='/' />
-
+                    <Button type='button' label="Войти" variant="secondary" link='/' />
                 </div>
             </form>
         </div>

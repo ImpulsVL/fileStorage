@@ -6,51 +6,43 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../../processes/auth/Firebase';
 import styles from './AutorizeBlock.module.scss';
 import Button from '@/shared/components/buttons/button';
 import ButtonGoogle from '@/shared/components/buttons/buttonGoogle';
 import Input from '@/shared/components/inputs/input';
 
-const schema = z.object({
-    email: z.string().email('Некорректный адрес электронной почты').nonempty('Электронная почта обязательна'),
-    password: z.string().min(6, 'Пароль должен содержать минимум 6 символов').nonempty('Пароль обязателен'),
-});
-
 const AutorizeBlock: React.FC = () => {
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        resolver: zodResolver(schema),
-    });
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
 
-    const onSubmit = (data: { email: string; password: string }) => {
-
-    };
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(e.target.value);
-    };
-
-    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(e.target.value);
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            alert('Авторизация успешна!');
+            // Здесь можно перенаправить пользователя на другую страницу, например, на главную
+            // router.push('/'); // Если вы используете useRouter из 'next/router'
+        } catch (error) {
+            alert();
+        }
     };
 
     return (
         <div className={styles.autorize}>
             <h1 className={styles.title}>Авторизация</h1>
 
-            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+            <form className={styles.form} onSubmit={handleLogin}>
                 <div className={styles.input__group}>
-                    <Input type="email" value={email}  placeholder='Электронная почта' id='email' onChange={handleEmailChange}/>
-
-                    <Input type="password" value={password}  placeholder='Пароль' id='password' onChange={handlePasswordChange}/>
+                    <Input type="email" value={email} placeholder='Электронная почта' id='email' onChange={(e) => setEmail(e.target.value)} />
+                    <Input type="password" value={password} placeholder='Пароль' id='password' onChange={(e) => setPassword(e.target.value)} />
                 </div>
 
                 <div className={styles.button__group}>
-                    <Button type='submit' label="Войти" variant="primary"/>
-                    <Button type='submit' label="Зарегистрироваться" variant="secondary" link='/register'/>
+                    <Button type='submit' label="Войти" variant="primary" link='/main'/>
+                    <Button type='button' label="Зарегистрироваться" variant="secondary" link='/register' />
                 </div>
             </form>
 
