@@ -23,8 +23,7 @@ const AutorizeBlock: React.FC = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
             alert('Авторизация успешна!');
-            // Здесь можно перенаправить пользователя на другую страницу, например, на главную
-            // router.push('/'); // Если вы используете useRouter из 'next/router'
+
         } catch (error) {
             alert();
         }
